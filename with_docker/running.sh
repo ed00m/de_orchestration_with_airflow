@@ -31,7 +31,7 @@ EXISTS_BINARY_DOCKER=$(whereis -b docker |awk '{print $2}')
 
 # if binary exists running with docker
 if [ ! -z ${EXISTS_BINARY_DOCKER_COMPOSE} ] && [ ! -z ${EXISTS_BINARY_DOCKER} ]; then
-    echo "Memoria: "$(docker run --rm "debian:bullseye-slim" bash -c 'numfmt --to iec $(echo $(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE))))')
+    echo "MEMORY: "$(docker run --rm "debian:bullseye-slim" bash -c 'numfmt --to iec $(echo $(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE))))')
 
     export COMPOSE_FILE=${AIRFLOW_HOME}/docker-compose.yaml
     export AIRFLOW_UID=$(id -u)
