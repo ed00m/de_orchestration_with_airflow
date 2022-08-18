@@ -18,7 +18,7 @@ echo "AIRFLOW_UID=$(id -u)" > ${AIRFLOW_HOME}/.env
 echo $(cat ${AIRFLOW_HOME}/.env)
 
 # if YAML does not exist download
-if [ -f ${AIRFLOW_HOME}/docker-compose.yaml ]; then
+if [ ! -f ${AIRFLOW_HOME}/docker-compose.yaml ]; then
     curl -o ${AIRFLOW_HOME}/docker-compose.yaml \
         -Lfs 'https://airflow.apache.org/docs/apache-airflow/2.3.3/docker-compose.yaml'
 else
