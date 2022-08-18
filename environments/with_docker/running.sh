@@ -14,7 +14,7 @@ export AIRFLOW_HOME=~/airflow_running_with_docker
 mkdir -p ${AIRFLOW_HOME}/dags ${AIRFLOW_HOME}/logs ${AIRFLOW_HOME}/plugins
 
 # In case of running manually
-echo -e "AIRFLOW_UID=$(id -u)" > ${AIRFLOW_HOME}/.env
+echo "AIRFLOW_UID=$(id -u)" > ${AIRFLOW_HOME}/.env
 echo $(cat ${AIRFLOW_HOME}/.env)
 
 # if YAML does not exist download
@@ -37,8 +37,9 @@ if [ ! -z ${EXISTS_BINARY_DOCKER_COMPOSE} ] && [ ! -z ${EXISTS_BINARY_DOCKER} ];
     export AIRFLOW_UID=$(id -u)
 
     # airflow init
-    docker-compose up airflow-init
-    
+    docker-compose up airflow-init >> ${AIRFLOW_HOME}/logs/airflow-init_$(date +"%Y-%m-%d").log
+    echo "[X] check airflow-init log in "${AIRFLOW_HOME}/logs/airflow-init_$(date +"%Y-%m-%d").log
+
     # shell args
     if [ $# -gt 0 ]; then
         #
@@ -58,7 +59,12 @@ if [ ! -z ${EXISTS_BINARY_DOCKER_COMPOSE} ] && [ ! -z ${EXISTS_BINARY_DOCKER} ];
         exec docker-compose up
     fi
 else
-    echo "docker and docker-compose binary not found, install with
-    https://docs.docker.com/engine/install/ \n
-    https://docs.docker.com/desktop/install/linux-install/"
+    echo "
+docker and docker-compose binary not found,
+
+Install with
+
+https://docs.docker.com/engine/install/
+https://docs.docker.com/desktop/install/linux-install/
+    "
 fi  
