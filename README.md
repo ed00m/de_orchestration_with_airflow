@@ -34,4 +34,22 @@ Data Engineering - Orchestration With airflow
         5. Now your environment is ready to run (approx 16 min), check your DAGs folder and open the airflow UI.
         6. When you finish your tests of this PoC you can destroy the environment on GCP with `terraform destroy`
     
+
+* ## Running With Kubernetes
+
+    * Running with Kubernetes?
+        * [What is Kubernetes?](https://kubernetes.io/) | [docs](https://kubernetes.io/docs/home/) | [Airflow in Kubernetes](https://airflow.apache.org/docs/apache-airflow/stable/kubernetes.html) | [kubectl auth changes in gke](https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke)
+
+    * A deploy with helm? 
+        * [What is helm?](https://helm.sh/) | [docs](https://helm.sh/docs/) | [Install](https://helm.sh/docs/intro/install/) | [helm chart parameters](https://airflow.apache.org/docs/helm-chart/stable/parameters-ref.html)
+
+    * Let's do the Deployment with helm in GKE
+        1. [optional] Create cluster Kubernetes type [Auto-Pilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) in GCP (GKE) with: `gcloud container --project __PROJECT_ID__ clusters create-auto __CLUSTER_NAME__ --region __REGION__ --cluster-ipv4-cidr "/17" --services-ipv4-cidr "/22"`
+        2. [optional] Get Configuration from Cluster `gcloud container clusters get-credentials __CLUSTER_NAME__ --region __REGION__ --project __PROJECT_ID__`
+        3. Add repo to helm `helm repo add apache-airflow https://airflow.apache.org`
+        4. Install chart run: `helm upgrade --install airflow apache-airflow/airflow --namespace airflow`
+        5. When finish the installation `kubectl port-forward svc/airflow-webserver 8080:8080 --namespace airflow`
+        6. Your credentials are in line "_Default Webserver (Airflow UI) Login credentials:_".
+        7. When you finish your tests of this PoC you can destroy the environment on GCP first deleting helm chart `helm delete airflow --namespace airflow`
+        8. [optional] Delete Cluster GKE with: `gcloud container --project __PROJECT_ID__ clusters delete __CLUSTER_NAME__ --region __REGION__`
     
