@@ -3,3 +3,4 @@
 service-account.json
 terraform.tfstate
 terraform.tfstate.backup
+.vscode/
