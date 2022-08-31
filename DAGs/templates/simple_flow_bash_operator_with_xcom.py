@@ -16,7 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""Example DAG demonstrating the usage of the BashOperator."""
+""""""
 
 import random
 import datetime
@@ -31,12 +31,12 @@ from airflow.operators.dummy_operator import DummyOperator
 folders = ["/tmp", "/home", "/usr/bin", "/var", "/srv"]
 
 with DAG(
-    dag_id='simple_flow_bash_operator',
-    schedule_interval='0 0 * * *',
+    dag_id='simple_flow_bash_operator_xcom',
+    schedule_interval='@daily',
     start_date=pendulum.datetime(2022, 8, 30, tz="UTC"),
     catchup=False,
     dagrun_timeout=datetime.timedelta(minutes=60),
-    tags=['BashOperator', 'simple_flow'],
+    tags=['BashOperator', 'xcom', 'simple_flow'],
     params={"example_key": "example_value"},
 ) as dag:
 
@@ -49,10 +49,14 @@ with DAG(
         task_id='end',
     )
 
+    # tasks template
+    bash_command_tasks_template = ",".join(["\'runme_"+folder.replace("/", "_")+"\'" for folder in folders])
+
     # resting Task where other Task converge
     reace_bench = BashOperator(
         task_id='reace_bench',
-        bash_command='echo "run_id={{ run_id }} | dag_run={{ dag_run }}"',
+        bash_command='echo "run_id={{ run_id }} | dag_run={{ dag_run }} | runme_taks={{ti.xcom_pull(task_ids=['+bash_command_tasks_template+'])}}"',
+        do_xcom_push=False
     )
     # flow mapping
     reace_bench >> end
@@ -62,7 +66,8 @@ with DAG(
         sleeper = random.randint(10, 50)
         task = BashOperator(
             task_id='runme_' + folder.replace("/", "_"),
-            bash_command='df -hT ' + folder + ' && echo "{{ task_instance_key_str }}" && sleep ' + str(sleeper),
+            bash_command='echo "{{ task_instance_key_str }}" && sleep ' + str(sleeper) + ' && df -hT ' + folder + ' | tail -n +2 | awk \'{ print $6 }\'',
+            do_xcom_push=True
         )
         begin >> task >> reace_bench
 
