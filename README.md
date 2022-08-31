@@ -7,7 +7,7 @@ Data Engineering - Orchestration With airflow
 
     Run `sh environments/locally/running.sh` for a environment locally with default values. Navigate to `http://localhost:8080/`. [(docs)](https://airflow.apache.org/docs/apache-airflow/stable/start/local.html)
 
-* ## Running With Docker 
+* ## Running With Docker and apache-airflow: +2.3.3
 
     Run `sh environments/with_docker/running.sh` for a environment with Docker. Navigate to `http://localhost:8080/`. [(docs)](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
 
