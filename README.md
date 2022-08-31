@@ -52,4 +52,14 @@ Data Engineering - Orchestration With airflow
         6. Your credentials are in line "_Default Webserver (Airflow UI) Login credentials:_".
         7. When you finish your tests of this PoC you can destroy the environment on GCP first deleting helm chart `helm delete airflow --namespace airflow`
         8. [optional] Delete Cluster GKE with: `gcloud container --project __PROJECT_ID__ clusters delete __CLUSTER_NAME__ --region __REGION__`
-    
+
+## DAGs Templates
+
+The different templates are in the DAGS/templates directory
+
+Open a shell console and run `ls -1 DAGs/templates` or in your favorite editor explore this path
+
+~~~~ DAGs/templates
+    simple_flow_bash_operator.py
+    simple_flow_bash_operator_with_xcom.py
+~~~~
